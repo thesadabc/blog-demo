@@ -5,11 +5,9 @@ window.addEventListener("load", function() {
         // always be grand
         if (state === "denied") return Promise.reject("background-sync denied");
 
-        let proRegister = null;
+        navigator.serviceWorker.register("./worker.js");
         document.getElementById("btnSend").addEventListener("click", function() {
-            proRegister = proRegister || navigator.serviceWorker.register("./worker.js");
-
-            proRegister.then((swRegister) => {
+            navigator.serviceWorker.ready.then((swRegister) => {
                 return swRegister.sync.register("send-chats");
             });
         });

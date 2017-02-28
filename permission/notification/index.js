@@ -4,12 +4,12 @@ window.addEventListener('load', function() {
 
     // check permission
     navigator.permissions.query({ name: "notifications" }).then(({ state }) => {
-        return {
-            "granted": Promise.resolve("granted"),
-            "denied": Promise.reject("notice denied!"),
-            // request the permission
-            "default": Notification.requestPermission()
-        }
+        return ({
+                "granted": Promise.resolve("granted"),
+                "denied": Promise.resolve("denied"),
+                // request the permission
+                "default": Notification.requestPermission()
+        })[state]
     }).then((state) => {
         if (state !== "granted") return Promise.reject("notice denied!");
 
@@ -42,10 +42,9 @@ window.addEventListener('load', function() {
         /***********************************
          * notice from service worker
          ***********************************/
-        let proRegister = null;
+        navigator.serviceWorker.register("./worker.js");
         document.getElementById("btnNoticeWoker").addEventListener("click", function() {
-            proRegister = proRegister || navigator.serviceWorker.register("./worker.js");
-            proRegister.then((swRegister) => {
+            navigator.serviceWorker.ready.then((swRegister) => {
                 const now = Date();
                 swRegister.showNotification("you has a new notice", {
                     body: "this is notice from worker" + now,
