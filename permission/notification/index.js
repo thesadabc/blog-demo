@@ -1,6 +1,6 @@
 let log = console.log.bind(console);
 
-window.addEventListener('load', function() {
+window.addEventListener("load", function() {
 
     // check permission
     navigator.permissions.query({ name: "notifications" }).then(({ state }) => {

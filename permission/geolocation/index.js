@@ -6,7 +6,7 @@ function log(...strs) {
     document.getElementById("log").innerHTML += (str + "\n");
 }
 
-window.addEventListener('load', function() {
+window.addEventListener("load", function() {
 
 
     document.getElementById("btnGeo").addEventListener("click", function() {
