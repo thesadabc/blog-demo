@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>web component</title>
+    <script src="/index.js"></script>
+    <link rel="stylesheet" href="/index.css">
+
+    <link rel="import" href="/components/list/index.html" >
+    <link rel="import" href="/components/thumb/index.html" >
+</head>
+<body>
+	<list-box class="container">
+        <div class="title"><p class="text">select image to preview</p></div>
+    	<img-thumb class="item-image"></img-thumb>
+    	<img-thumb class="item-image"></img-thumb>
+        <div class="controller">
+            <button class="btn-submit">get files</button>
+            <button class="btn-clear">clear files</button>
+        </div>
+	</list-box>
+</body>
+</html>

@@ -1,0 +1,20 @@
+:host {
+    display: block;
+    cursor: pointer;
+    height: 100px
+}
+
+#main {
+    height: 100%;
+}
+
+#iptImg {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+#imgPreview {
+    width: 100%;
+    height: 100%;
+}
