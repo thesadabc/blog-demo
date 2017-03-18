@@ -1,0 +1,6 @@
+.home .title .text {
+    margin: 0;
+}
+.home>*{
+    margin: 10px 0;
+}
