@@ -9,3 +9,6 @@ all demo from [blog](http://www.xjp.in).
 | web components | [live demo](https://thesadabc.github.io/blog-demo/webcomponents) | - | [blog](http://www.xjp.in/2017/03/18/%E5%89%8D%E7%AB%AF%E7%BB%84%E4%BB%B6%E7%9A%84%E6%9C%AC%E8%B4%A8%E5%88%B0%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%BB%84%E4%BB%B6%E6%B8%B2%E6%9F%93/) |
 | components server render | - | [server-render-components](./server-render-components)  | [blog](http://www.xjp.in/2017/03/18/%E5%89%8D%E7%AB%AF%E7%BB%84%E4%BB%B6%E7%9A%84%E6%9C%AC%E8%B4%A8%E5%88%B0%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%BB%84%E4%BB%B6%E6%B8%B2%E6%9F%93/) |
 | gpu.js demo | [gpu.js live demo](https://thesadabc.github.io/blog-demo/gputest) | [gputest](./gputest) | [blog](http://www.xjp.in/2017/10/22/%E4%BD%BF%E7%94%A8JS%E7%9A%84%E8%BF%9B%E8%A1%8CGPU%E8%AE%A1%E7%AE%97/) |
+| gpu webgl demo | [gpu webgl live demo](https://thesadabc.github.io/blog-demo/gputest2) | [gputest2](./gputest2) | [blog](http://www.xjp.in/2017/12/17/js%E7%9A%84GPU%E8%AE%A1%E7%AE%972%E4%B9%8Bwebgl/) |
+
+
