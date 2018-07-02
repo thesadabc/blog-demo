@@ -112,6 +112,17 @@ class MatrixTexture extends GPUComputing {
     }
 }
 
+// input by texture
+class MatrixTextureForCost extends GPUComputing {
+    async init() {
+        await super.init("v_shader.c", "f_matrix_texture.c");
+    }
+    loadMat(matrixA, matrixB){
+        this.initTexture(0, "samplerA", matrixA)
+        this.initTexture(1, "samplerB", matrixB)
+    }
+}
+
 // draw whole texture to canvase
 class ShowTexture extends GPUComputing {
     constructor(dimen, canvasSize) {
@@ -174,18 +185,18 @@ async function matrixJob(dimensions) {
 
     const randomMatrix = createMatrix(dimensions, () => Math.floor(Math.random() * 1000));
     const randomMatrixU8 = new Uint8Array(randomMatrix.buffer);
-    console.log("matrix input", randomMatrix);
-    console.log("matrix input in Uint8Array", randomMatrixU8);
+    // console.log("matrix input", randomMatrix);
     let result = null;
 
-    console.time("demoMatrixUniform");
-    const demoMatrixUniform = window.demoMatrixUniform = new MatrixUniform(dimensions);
-    await demoMatrixUniform.init(randomMatrix, randomMatrix);
-    demoMatrixUniform.render();
-    result = demoMatrixUniform.read();
-    console.timeEnd("demoMatrixUniform");
-    console.log("demoMatrixUniform output", result);
-
+    if (dimensions < 10){
+        console.time("demoMatrixUniform");
+        const demoMatrixUniform = window.demoMatrixUniform = new MatrixUniform(dimensions);
+        await demoMatrixUniform.init(randomMatrix, randomMatrix);
+        demoMatrixUniform.render();
+        result = demoMatrixUniform.read();
+        console.timeEnd("demoMatrixUniform");
+        // console.log("demoMatrixUniform output", result);
+    }
 
     console.time("demoMatrixTexture")
     const demoMatrixTexture = window.demoMatrixTexture = new MatrixTexture(dimensions);
@@ -193,7 +204,7 @@ async function matrixJob(dimensions) {
     demoMatrixTexture.render();
     result = demoMatrixTexture.read();
     console.timeEnd("demoMatrixTexture");
-    console.log("demoMatrixTexture output", result);
+    // console.log("demoMatrixTexture output", result);
 
     const matrixMultiplyCPU = function(ma, mb) {
         return createMatrix(dimensions, function(x, y) {
@@ -207,7 +218,7 @@ async function matrixJob(dimensions) {
     console.time("matrixMultiplyCPU");
     result = matrixMultiplyCPU(randomMatrix, randomMatrix);
     console.timeEnd("matrixMultiplyCPU");
-    console.log("matrixMultiplyCPU output", result);
+    // console.log("matrixMultiplyCPU output", result);
 }
 
 
@@ -216,10 +227,11 @@ async function matrixCost(dimensions) {
     const randomMatrix = createMatrix(dimensions, () => Math.floor(Math.random() * 50));
     const randomMatrixU8 = new Uint8Array(randomMatrix.buffer);
 
-    const costdemoMatrixTexture = window.costdemoMatrixTexture = new MatrixTexture(dimensions);
-    console.time("init");
-    await costdemoMatrixTexture.init(randomMatrixU8, randomMatrixU8);
-    console.timeEnd("init");
+    const costdemoMatrixTexture = window.costdemoMatrixTexture = new MatrixTextureForCost(dimensions);
+    await costdemoMatrixTexture.init();
+    console.time("load");
+    costdemoMatrixTexture.loadMat(randomMatrixU8, randomMatrixU8);
+    console.timeEnd("load");
     console.time("render");
     costdemoMatrixTexture.render();
     console.timeEnd("render");
