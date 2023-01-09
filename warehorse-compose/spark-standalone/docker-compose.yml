@@ -1,0 +1,54 @@
+version: "3"
+
+x-base-service:
+  &base-service
+  image: bitnami/spark:3.3
+  environment: &base-env
+      TZ: "Asia/Shanghai"
+      SPARK_MODE: "worker"
+      SPARK_MASTER_URL: "spark://master.spark.example.com:7077"
+      SPARK_WORKER_MEMORY: "1G"
+      SPARK_WORKER_CORES: "1"
+
+services:
+  master.spark.example.com:
+    image: bitnami/spark:3.3
+    hostname: master.spark.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.2.40"
+    environment:
+      - TZ=Asia/Shanghai
+      - SPARK_MODE=master
+
+  w01.spark.example.com:
+    << : *base-service
+    hostname: w01.spark.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.2.41"
+
+  w02.spark.example.com:
+    << : *base-service
+    hostname: w02.spark.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.2.42"
+
+  w03.spark.example.com:
+    << : *base-service
+    hostname: w03.spark.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.2.43"
+
+  w04.spark.example.com:
+    << : *base-service
+    hostname: w04.spark.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.2.44"
+
+networks:
+  hostvpc:
+    external: true

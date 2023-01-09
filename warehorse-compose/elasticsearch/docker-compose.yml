@@ -1,0 +1,78 @@
+version: "3"
+
+x-base-service:
+  &base-service
+  image: 'elasticsearch:7.17.8'
+  environment: &base-env
+    TZ: "Asia/Shanghai"
+    cluster.name: "es-cluster"
+    cluster.initial_master_nodes: es01.example.com,es02.example.com,es03.example.com,es04.example.com
+    ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+  ulimits:
+    memlock:
+      soft: -1
+      hard: -1
+
+services:
+  es01.example.com:
+    << : *base-service
+    hostname: es01.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.2.31"
+    volumes:
+      - "./volumes-es01:/usr/share/elasticsearch/data"
+    environment:
+      << : *base-env
+      discovery.seed_hosts: es02.example.com,es03.example.com,es04.example.com
+
+  es02.example.com:
+    << : *base-service
+    hostname: es02.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.2.32"
+    volumes:
+      - "./volumes-es02:/usr/share/elasticsearch/data"
+    environment:
+      << : *base-env
+      discovery.seed_hosts: es01.example.com,es03.example.com,es04.example.com
+
+  es03.example.com:
+    << : *base-service
+    hostname: es03.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.2.33"
+    volumes:
+      - "./volumes-es03:/usr/share/elasticsearch/data"
+    environment:
+      << : *base-env
+      discovery.seed_hosts: es01.example.com,es02.example.com,es04.example.com
+
+  es04.example.com:
+    << : *base-service
+    hostname: es04.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.2.34"
+    volumes:
+      - "./volumes-es04:/usr/share/elasticsearch/data"
+    environment:
+      << : *base-env
+      discovery.seed_hosts: es01.example.com,es02.example.com,es03.example.com
+
+  kibana.example.com:
+    image: 'kibana:7.17.8'
+    hostname: kibana.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.2.30"
+    environment:
+      TZ: "Asia/Shanghai"
+      SERVER_NAME: kibana.example.com
+      ELASTICSEARCH_HOSTS: '["http://es01.example.com:9200","http://es02.example.com:9200","http://es03.example.com:9200","http://es04.example.com:9200"]'
+
+networks:
+  hostvpc:
+    external: true

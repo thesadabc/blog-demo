@@ -1,0 +1,80 @@
+version: "3"
+
+services:
+  rm.yarn.example.com:
+    image: bde2020/hadoop-resourcemanager:2.0.0-hadoop3.2.1-java8
+    hostname: rm.yarn.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.2.20"
+    env_file:
+      - ./yarn.env
+
+  nm01.yarn.example.com:
+    image: bde2020/hadoop-nodemanager:2.0.0-hadoop3.2.1-java8
+    hostname: nm01.yarn.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.2.21"
+    volumes:
+      - ./volumes-nm01-logs:/app-logs
+    environment:
+      SERVICE_PRECONDITION: "rm.yarn.example.com:8088"
+    env_file:
+      - ./yarn.env
+
+  nm02.yarn.example.com:
+    image: bde2020/hadoop-nodemanager:2.0.0-hadoop3.2.1-java8
+    hostname: nm02.yarn.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.2.22"
+    volumes:
+      - ./volumes-nm02-logs:/app-logs
+    environment:
+      SERVICE_PRECONDITION: "rm.yarn.example.com:8088"
+    env_file:
+      - ./yarn.env
+
+  nm03.yarn.example.com:
+    image: bde2020/hadoop-nodemanager:2.0.0-hadoop3.2.1-java8
+    hostname: nm03.yarn.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.2.23"
+    volumes:
+      - ./volumes-nm03-logs:/app-logs
+    environment:
+      SERVICE_PRECONDITION: "rm.yarn.example.com:8088"
+    env_file:
+      - ./yarn.env
+
+  nm04.yarn.example.com:
+    image: bde2020/hadoop-nodemanager:2.0.0-hadoop3.2.1-java8
+    hostname: nm04.yarn.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.2.24"
+    volumes:
+      - ./volumes-nm04-logs:/app-logs
+    environment:
+      SERVICE_PRECONDITION: "rm.yarn.example.com:8088"
+    env_file:
+      - ./yarn.env
+
+  hs.yarn.example.com:
+    image: bde2020/hadoop-historyserver:2.0.0-hadoop3.2.1-java8
+    hostname: hs.yarn.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.2.29"
+    volumes:
+      - ./volumes-hs:/hadoop/yarn/timeline
+    environment:
+      SERVICE_PRECONDITION: "rm.yarn.example.com:8088"
+    env_file:
+      - ./yarn.env
+
+networks:
+  hostvpc:
+    external: true

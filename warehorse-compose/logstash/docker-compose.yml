@@ -1,0 +1,27 @@
+version: "3"
+
+
+x-base-service:
+  &base-service
+  image: 'logstash:8.5.2'
+  volumes:
+    - ./logs:/app/logs
+    - ./logstash.conf:/app/logstash.conf
+    - ./volumes-db:/app/db
+  environment: &base-env
+    TZ: "Asia/Shanghai"
+    XPACK_MONITORING_ENABLED: "false"
+    WEBHDFS_HOST: "nn.hdfs.example.com"
+    WEBHDFS_PORT: "9870"
+    KAFKA_BOOTSTRAP_SERVERS: "kafka01.example.com:9092,kafka02.example.com:9092,kafka03.example.com:9092,kafka04.example.com:9092"
+  command: logstash -f /app/logstash.conf
+
+services:
+  datastream.test:
+    << : *base-service
+    environment:
+      << : *base-env
+      INPUT_FILE: "/app/logs/test.log"
+      SINCEDB_PATH: "/app/db/.logstash.test.sincedb"
+      WEBHDFS_PATH: "/logstash/datastream.test/%{+YYYY-MM-dd}/part.log"
+      KAFKA_TOPIC: "datastream.test"

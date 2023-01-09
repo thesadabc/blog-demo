@@ -1,0 +1,73 @@
+version: "3"
+
+services:
+  nn.hdfs.example.com:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    hostname: nn.hdfs.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.2.10"
+    volumes:
+      - ./volumes-nn:/hadoop/dfs/name
+    environment:
+      - CLUSTER_NAME=hdfs-cluster
+    env_file:
+      - ./hdfs.env
+
+  dn01.hdfs.example.com:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    hostname: dn01.hdfs.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.2.11"
+    volumes:
+      - ./volumes-dn01:/hadoop/dfs/data
+    env_file:
+      - ./hdfs.env
+    environment:
+      SERVICE_PRECONDITION: "nn.hdfs.example.com:9870"
+
+
+  dn02.hdfs.example.com:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    hostname: dn02.hdfs.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.2.12"
+    volumes:
+      - ./volumes-dn02:/hadoop/dfs/data
+    env_file:
+      - ./hdfs.env
+    environment:
+      SERVICE_PRECONDITION: "nn.hdfs.example.com:9870"
+
+  dn03.hdfs.example.com:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    hostname: dn03.hdfs.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.2.13"
+    volumes:
+      - ./volumes-dn03:/hadoop/dfs/data
+    env_file:
+      - ./hdfs.env
+    environment:
+      SERVICE_PRECONDITION: "nn.hdfs.example.com:9870"
+
+  dn04.hdfs.example.com:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    hostname: dn04.hdfs.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.2.14"
+    volumes:
+      - ./volumes-dn04:/hadoop/dfs/data
+    env_file:
+      - ./hdfs.env
+    environment:
+      SERVICE_PRECONDITION: "nn.hdfs.example.com:9870"
+
+networks:
+  hostvpc:
+    external: true
+

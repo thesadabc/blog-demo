@@ -1,0 +1,65 @@
+version: "3"
+
+x-base-service:
+  &base-service
+  image: 'bitnami/kafka:latest'
+  environment: &base-env
+      TZ: "Asia/Shanghai"
+      KAFKA_ENABLE_KRAFT: "yes"
+      KAFKA_CFG_PROCESS_ROLES: "broker,controller"
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      KAFKA_CFG_LISTENERS: "PLAINTEXT://:9092,CONTROLLER://:9093"
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT"
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: "1@kafka01.example.com:9093,2@kafka02.example.com:9093,3@kafka03.example.com:9093,4@kafka04.example.com:9093"
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+      KAFKA_KRAFT_CLUSTER_ID: "xtzWWN4bTjitpL3kfd9s5g"
+
+services:
+  kafka01.example.com:
+    << : *base-service
+    hostname: kafka01.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.33.191"
+    volumes:
+      - "./volumes-kafka01:/bitnami/kafka"
+    environment:
+      << : *base-env
+      KAFKA_BROKER_ID: 1
+  kafka02.example.com:
+    << : *base-service
+    hostname: kafka02.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.33.192"
+    volumes:
+      - "./volumes-kafka02:/bitnami/kafka"
+    environment:
+      << : *base-env
+      KAFKA_BROKER_ID: 2
+  kafka03.example.com:
+    << : *base-service
+    hostname: kafka03.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.33.193"
+    volumes:
+      - "./volumes-kafka03:/bitnami/kafka"
+    environment:
+      << : *base-env
+      KAFKA_BROKER_ID: 3
+  kafka04.example.com:
+    << : *base-service
+    hostname: kafka04.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.33.194"
+    volumes:
+      - "./volumes-kafka04:/bitnami/kafka"
+    environment:
+      << : *base-env
+      KAFKA_BROKER_ID: 4
+
+networks:
+  hostvpc:
+    external: true

@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  hive2.example.com:
+    image: bde2020/hive:2.3.2
+    hostname: hive2.example.com
+    networks:
+      hostvpc:
+        ipv4_address: "192.168.2.60"
+    volumes:
+      - ./mysql-connector-j-8.0.31.jar:/opt/hive/lib/mysql-connector-j-8.0.31.jar
+    env_file:
+      - ./hive.env
+      # 使用yarn调度节点资源进行mr计算， 否则使用hadoop LocalJobRunner进行本地计算， 
+      # - ../hadoop-yarn/yarn.env
+
+networks:
+  hostvpc:
+    external: true
+
